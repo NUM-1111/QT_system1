@@ -155,7 +155,7 @@ void TcpServer::processCommand(const QString &command, QTcpSocket *clientSocket)
     QString response;
 
     if (command == "/show_ui") {
-        qDebug() << "收到show_ui命令，准备启动界面";
+        qDebug() << "收到 show_ui 命令";
         emit showUiRequested();
         response = "OK: 界面启动命令已执行";
     }
@@ -164,9 +164,15 @@ void TcpServer::processCommand(const QString &command, QTcpSocket *clientSocket)
     }
     else if (command == "/help") {
         response = "支持的命令:\n"
-                  "/show_ui - 启动前端界面\n"
-                  "/status - 查看系统状态\n"
-                  "/help - 显示帮助信息";
+                   "/show_ui - 启动前端界面\n"
+                   "/status - 查看系统状态\n"
+                   "/help - 显示帮助信息";
+    }
+    else if (!command.startsWith("/")) {
+        // 🔥 不是以斜杠开头的内容，视为 userId
+        qDebug() << "收到用户ID: " << command;
+        emit userIdReceived(command);  // 🚀 发出信号
+        response = "OK: 用户ID已处理";
     }
     else {
         response = QString("ERROR: 未知命令 '%1'，输入 /help 查看支持的命令").arg(command);
@@ -174,6 +180,7 @@ void TcpServer::processCommand(const QString &command, QTcpSocket *clientSocket)
 
     sendResponse(response, clientSocket);
 }
+
 
 void TcpServer::sendResponse(const QString &response, QTcpSocket *clientSocket)
 {

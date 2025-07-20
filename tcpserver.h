@@ -72,6 +72,8 @@ signals:
      */
     void commandReceived(const QString &command, const QString &clientAddress);
 
+    void userIdReceived(const QString& userId); // 传出用户ID
+
 private slots:
     /**
      * @brief 处理新的客户端连接
