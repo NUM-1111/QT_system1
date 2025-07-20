@@ -4,6 +4,7 @@
 #include <QApplication>
 #include <QDebug>
 #include <QTimer>
+#include <QTcpServer>
 
 int main(int argc, char *argv[])
 {
@@ -46,10 +47,13 @@ int main(int argc, char *argv[])
     });
     
     // 启动TCP服务端
-    if (!tcpServer->startServer(8080)) {
-        qDebug() << "❌ TCP服务端启动失败";
+    bool ok = tcpServer->startServer(8080);
+    qDebug() << "startServer 返回:" << ok;
+    if (!ok) {
+        qDebug() << "错误信息:" << tcpServer->serverError();
         return -1;
     }
+
     
     qDebug() << "✅ TCP服务端启动成功，监听端口8080";
     qDebug() << "✅ 分系统1启动完成，等待主系统连接...";

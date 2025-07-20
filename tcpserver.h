@@ -14,7 +14,7 @@
  * 支持的命令：
  * - "/show_ui" : 启动前端界面
  */
-class TcpServer : public QObject
+class TcpServer : public QTcpServer
 {
     Q_OBJECT
 
@@ -22,6 +22,7 @@ public:
     explicit TcpServer(QObject *parent = nullptr);
     ~TcpServer();
 
+    QString serverError() const;  // 声明
     /**
      * @brief 启动TCP服务端
      * @param port 监听端口，默认8080

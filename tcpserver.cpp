@@ -2,7 +2,7 @@
 #include <QNetworkInterface>
 
 TcpServer::TcpServer(QObject *parent)
-    : QObject(parent)
+    : QTcpServer(parent)
     , m_server(nullptr)
     , m_isRunning(false)
     , m_port(8080)
@@ -12,6 +12,11 @@ TcpServer::TcpServer(QObject *parent)
 TcpServer::~TcpServer()
 {
     stopServer();
+}
+
+QString TcpServer::serverError() const
+{
+    return m_server ? m_server->errorString() : "server 未初始化";
 }
 
 bool TcpServer::startServer(quint16 port)
